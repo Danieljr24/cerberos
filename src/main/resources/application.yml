@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: olimpo-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/olimpo_db
+    username: root
+    password: fabrica2024*
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  graphql:
+    servlet:
+      mapping: /graphql
+      enabled: true
+    graphiql:
+      enabled: true
+      endpoint: /graphql
+      path: /graphiql
+
+  jwt:
+    secret: 22341327198458621538721376214215432164821
+
+
+server:
+  port: 8081
