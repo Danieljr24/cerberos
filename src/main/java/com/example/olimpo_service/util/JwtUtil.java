@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "mi-clave-super-hiper-secreta"; // Debe tener ≥32 caracteres
+    private static final String SECRET_KEY = "123456789012346890123456781234567891234567890123456789"; // Debe tener ≥32 caracteres
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
