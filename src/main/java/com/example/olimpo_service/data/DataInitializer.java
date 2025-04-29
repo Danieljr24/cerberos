@@ -22,7 +22,7 @@ public class DataInitializer implements CommandLineRunner {
     private UserRoleRepository userRoleRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // 🔒 Para cifrar contraseñas
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional

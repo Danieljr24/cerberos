@@ -23,7 +23,7 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request, HttpServletResponse response) {
         String token = authService.login(request);
-        authService.setTicketCookie(token, response); // Establece cookie con ticket
+        authService.setTicketCookie(token, response);
         return token;
     }
 
