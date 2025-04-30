@@ -3,13 +3,13 @@ package com.example.olimpo_service.controller;
 import com.example.olimpo_service.dto.LoginRequest;
 import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.service.AuthService;
-import com.example.olimpo_service.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,13 +18,11 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private final JwtUtil jwtUtil;
-
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         String token = authService.login(request);
         authService.setTicketCookie(token, response);
-        return token;
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/register")
@@ -33,11 +31,12 @@ public class AuthController {
     }
 
     @GetMapping("/user/profile")
-    public ResponseEntity<?> getProfile(@RequestHeader("Token") String token) {
-
-        String username = jwtUtil.extractUsername(token);
-        System.out.println("Username: " + username);
-        return ResponseEntity.ok("Bienvenido " + username);
+    public ResponseEntity<?> getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String documento = authentication.getName();
+            return ResponseEntity.ok("Bienvenido " + documento);
+        }
+        return ResponseEntity.status(401).body("No autenticado");
     }
-
 }

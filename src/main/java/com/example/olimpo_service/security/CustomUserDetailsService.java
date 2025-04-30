@@ -19,12 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameWithRoles(username)
-        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    public UserDetails loadUserByUsername(String documento) throws UsernameNotFoundException { // Cambiado de username a documento
+        User user = userRepository.findByDocumentoWithRoles(documento)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
+                .username(user.getDocumento()) // Aquí usamos documento
                 .password(user.getPassword())
                 .authorities(user.getRoles().stream()
                         .map(role -> "ROLE_" + role.getRoleName())

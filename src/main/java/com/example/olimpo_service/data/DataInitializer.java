@@ -1,35 +1,34 @@
 package com.example.olimpo_service.data;
 
+import com.example.olimpo_service.entities.TipoDocumento;
 import com.example.olimpo_service.entities.User;
 import com.example.olimpo_service.entities.UserRole;
 import com.example.olimpo_service.repository.UserRepository;
 import com.example.olimpo_service.repository.UserRoleRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataInitializer {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
+    public DataInitializer(UserRepository userRepository,
+                           UserRoleRepository userRoleRepository,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Override
-    @Transactional
-    public void run(String... args) {
+    public void initializeData() {
         if (userRepository.count() == 0) {
-            User zeus = createUser("zeus", "12345");
-            User dani = createUser("dani", "1234");
+            User zeus = createUser("10000001", "12345", TipoDocumento.CEDULA_CIUDADANIA);
+            User dani = createUser("10000002", "1234", TipoDocumento.TARJETA_IDENTIDAD);
 
             createRole(zeus, "ADMIN");
             createRole(dani, "USER");
@@ -38,10 +37,11 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private User createUser(String username, String password) {
+    private User createUser(String documento, String password, TipoDocumento tipoDocumento) {
         User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password)); // 🔐 Encryptar contraseña
+        user.setDocumento(documento);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setTipoDocumento(tipoDocumento);
         user.setRoles(new ArrayList<>());
         return userRepository.save(user);
     }
@@ -50,9 +50,7 @@ public class DataInitializer implements CommandLineRunner {
         UserRole userRole = new UserRole();
         userRole.setRoleName(roleName);
         userRole.setUser(user);
-
-        user.getRoles().add(userRole); // Asocia el rol al usuario
-
+        user.getRoles().add(userRole);
         userRoleRepository.save(userRole);
     }
 }

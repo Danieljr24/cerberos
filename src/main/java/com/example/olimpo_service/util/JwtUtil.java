@@ -14,16 +14,16 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "123456789012346890123456781234567891234567890123456789"; // Debe tener ≥32 caracteres
+    private static final String SECRET_KEY = "123456789012346890123456781234567891234567890123456789";
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username, List<String> roles) {
+    public String generateToken(String documento, List<String> roles) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", roles);
-        return createToken(claims, username);
+        return createToken(claims, documento);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -31,7 +31,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600 * 1000)) // 1 hora
+                .setExpiration(new Date(System.currentTimeMillis() + 3600 * 1000))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -48,13 +48,11 @@ public class JwtUtil {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    public boolean isTokenValid(String token, String username) {
-        return (extractUsername(token).equals(username) && !isTokenExpired(token));
+    public boolean isTokenValid(String token, String documento) {
+        return extractUsername(token).equals(documento) && !isTokenExpired(token);
     }
 
     public String extractUsername(String token) {
-        System.out.println("Token: " + token);
-        System.out.println("Claims: " + extractClaims(token));
         return extractClaims(token).getSubject();
     }
 }

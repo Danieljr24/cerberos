@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/olimpo_db
-    username: root
-    password: fabrica2024*
+    username: Christian
+    password: holamundo
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

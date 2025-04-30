@@ -33,18 +33,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getTokenFromCookie(request);
-            System.out.println("JWT desde la cookie: " + jwt);
             if (jwt == null) {
                 jwt = getTokenFromHeader(request);
             }
-            System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
             if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                String username = jwtUtil.extractUsername(jwt);
-                System.out.println(jwtUtil.isTokenValid(jwt, username));
-                if (username != null && jwtUtil.isTokenValid(jwt, username) == true) {
-                    var userDetails = userDetailsService.loadUserByUsername(username);
-                    var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                String documento = jwtUtil.extractUsername(jwt); // Cambiado de username a documento
+            
+                if (documento != null && jwtUtil.isTokenValid(jwt, documento)) {
+                    var userDetails = userDetailsService.loadUserByUsername(documento); // Cambiado de username a documento
+                    var auth = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
