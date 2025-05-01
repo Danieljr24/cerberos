@@ -1,7 +1,9 @@
 package com.example.cerberos.entities;
 
 public enum TipoDocumento {
-    TARJETA_IDENTIDAD,
     CEDULA_CIUDADANIA,
-    CEDULA_EXTRANJERIA
+    TARJETA_IDENTIDAD,
+    CEDULA_EXTRANJERIA,
+    PASAPORTE,
+    PERMISO_ESPECIAL_PERMANENCIA
 }
