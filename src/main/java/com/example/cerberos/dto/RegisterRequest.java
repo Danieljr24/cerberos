@@ -1,9 +1,10 @@
-package com.example.olimpo_service.dto;
+package com.example.cerberos.dto;
 
-import com.example.olimpo_service.entities.TipoDocumento;
 import lombok.Data;
 
 import java.util.List;
+
+import com.example.cerberos.entities.TipoDocumento;
 
 @Data
 public class RegisterRequest {

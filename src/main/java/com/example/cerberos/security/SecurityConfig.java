@@ -1,4 +1,4 @@
-package com.example.olimpo_service.security;
+package com.example.cerberos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

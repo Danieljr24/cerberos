@@ -1,8 +1,9 @@
-package com.example.olimpo_service.repository;
+package com.example.cerberos.repository;
 
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.entities.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.cerberos.entities.User;
+import com.example.cerberos.entities.UserRole;
 
 import java.util.List;
 import java.util.Optional;

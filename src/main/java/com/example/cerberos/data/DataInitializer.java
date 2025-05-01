@@ -1,12 +1,15 @@
-package com.example.olimpo_service.data;
+package com.example.cerberos.data;
 
-import com.example.olimpo_service.entities.TipoDocumento;
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.entities.UserRole;
-import com.example.olimpo_service.repository.UserRepository;
-import com.example.olimpo_service.repository.UserRoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.cerberos.entities.TipoDocumento;
+import com.example.cerberos.entities.User;
+import com.example.cerberos.entities.UserRole;
+import com.example.cerberos.repository.UserRepository;
+import com.example.cerberos.repository.UserRoleRepository;
+
+import jakarta.annotation.PostConstruct;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class DataInitializer {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PostConstruct
     public void initializeData() {
         if (userRepository.count() == 0) {
             User zeus = createUser("10000001", "12345", TipoDocumento.CEDULA_CIUDADANIA);

@@ -1,4 +1,4 @@
-package com.example.olimpo_service;
+package com.example.cerberos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.example.olimpo_service.entities;
+package com.example.cerberos.entities;
 
 public enum TipoDocumento {
     TARJETA_IDENTIDAD,

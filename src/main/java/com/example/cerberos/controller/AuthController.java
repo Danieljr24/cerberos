@@ -1,13 +1,14 @@
-package com.example.olimpo_service.controller;
+package com.example.cerberos.controller;
 
-import com.example.olimpo_service.dto.LoginRequest;
-import com.example.olimpo_service.dto.RegisterRequest;
-import com.example.olimpo_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.cerberos.dto.LoginRequest;
+import com.example.cerberos.dto.RegisterRequest;
+import com.example.cerberos.service.AuthService;
 
 import jakarta.servlet.http.HttpServletResponse;
 

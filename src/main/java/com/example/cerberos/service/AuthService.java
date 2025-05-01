@@ -1,18 +1,19 @@
-package com.example.olimpo_service.service;
+package com.example.cerberos.service;
 
-import com.example.olimpo_service.dto.LoginRequest;
-import com.example.olimpo_service.dto.RegisterRequest;
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.entities.UserRole;
-import com.example.olimpo_service.repository.UserRepository;
-import com.example.olimpo_service.repository.UserRoleRepository;
-import com.example.olimpo_service.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.cerberos.dto.LoginRequest;
+import com.example.cerberos.dto.RegisterRequest;
+import com.example.cerberos.entities.User;
+import com.example.cerberos.entities.UserRole;
+import com.example.cerberos.repository.UserRepository;
+import com.example.cerberos.repository.UserRoleRepository;
+import com.example.cerberos.util.JwtUtil;
 
 import java.util.stream.Collectors;
 

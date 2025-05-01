@@ -1,12 +1,13 @@
-package com.example.olimpo_service.security;
+package com.example.cerberos.security;
 
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.cerberos.entities.User;
+import com.example.cerberos.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

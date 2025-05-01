@@ -1,10 +1,11 @@
-package com.example.olimpo_service.repository;
+package com.example.cerberos.repository;
 
-import com.example.olimpo_service.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import com.example.cerberos.entities.User;
 
 import java.util.Optional;
 
