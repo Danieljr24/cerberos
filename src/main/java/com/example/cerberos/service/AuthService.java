@@ -2,8 +2,6 @@ package com.example.cerberos.service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,26 +22,24 @@ public class AuthService {
     private final UserRoleRepository userRoleRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authManager;
 
     public AuthService(UserRepository userRepository,
                        UserRoleRepository userRoleRepository,
                        JwtUtil jwtUtil,
-                       PasswordEncoder passwordEncoder,
-                       AuthenticationManager authManager) {
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
-        this.authManager = authManager;
     }
 
     public String login(LoginRequest request) {
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getDocumento(), request.getPassword()));
-
-        var user = userRepository.findByDocumentoWithRoles(request.getDocumento())
+        User user = userRepository.findByDocumentoWithRoles(request.getDocumento())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
 
         var roles = user.getRoles().stream()
                 .map(UserRole::getRoleName)
@@ -54,6 +50,11 @@ public class AuthService {
 
     public String register(RegisterRequest request) {
         try {
+
+            if (userRepository.findByDocumento(request.getDocumento()).isPresent()) {
+                return "El usuario ya existe";
+            }
+
             User user = new User();
             user.setDocumento(request.getDocumento());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -78,7 +79,7 @@ public class AuthService {
         Cookie cookie = new Cookie("ticket", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60); // 1 día
+        cookie.setMaxAge(24 * 60 * 60);
         response.addCookie(cookie);
     }
 }

@@ -10,6 +10,7 @@ import com.example.cerberos.dto.LoginRequest;
 import com.example.cerberos.dto.RegisterRequest;
 import com.example.cerberos.service.AuthService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -23,21 +24,34 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         String token = authService.login(request);
         authService.setTicketCookie(token, response);
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().body("Login exitoso");
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        String result = authService.register(request);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/user/profile")
     public ResponseEntity<?> getProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated()
+            && !"anonymousUser".equals(authentication.getPrincipal())) {
             String documento = authentication.getName();
             return ResponseEntity.ok("Bienvenido " + documento);
         }
         return ResponseEntity.status(401).body("No autenticado");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("ticket", null);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logout exitoso");
     }
 }

@@ -49,10 +49,10 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token, String documento) {
-        return extractUsername(token).equals(documento) && !isTokenExpired(token);
+        return extractDocumento(token).equals(documento) && !isTokenExpired(token);
     }
 
-    public String extractUsername(String token) {
+    public String extractDocumento(String token) {
         return extractClaims(token).getSubject();
     }
 }

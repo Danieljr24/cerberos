@@ -28,6 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -40,10 +41,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                String documento = jwtUtil.extractUsername(jwt); // Cambiado de username a documento
+                String documento = jwtUtil.extractDocumento(jwt);
             
                 if (documento != null && jwtUtil.isTokenValid(jwt, documento)) {
-                    var userDetails = userDetailsService.loadUserByUsername(documento); // Cambiado de username a documento
+                    var userDetails = userDetailsService.loadUserByUsername(documento);
                     var auth = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

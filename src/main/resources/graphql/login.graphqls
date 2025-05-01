@@ -1,0 +1,20 @@
+type Query {
+  saludo: String
+}
+
+type Mutation {
+  login(input: LoginInput!): String
+  logout: String 
+}
+
+input LoginInput {
+  documento: String!
+  password: String!
+  tipoDocumento: TipoDocumento!
+}
+
+enum TipoDocumento {
+  TARJETA_IDENTIDAD
+  CEDULA_CIUDADANIA
+  CEDULA_EXTRANJERIA
+}
