@@ -1,5 +1,5 @@
 package com.example.cerberos.entities;
-
+//a
 public enum TipoDocumento {
     CEDULA_CIUDADANIA,
     TARJETA_IDENTIDAD,
