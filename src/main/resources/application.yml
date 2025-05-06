@@ -3,9 +3,9 @@ spring:
     name: olimpo-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/olimpo_db
-    username: Christian
-    password: holamundo
+    url: jdbc:mysql://localhost:3306/cerberos_db
+    username: root
+    password: fabrica2024*
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

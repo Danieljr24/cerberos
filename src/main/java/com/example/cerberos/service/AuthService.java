@@ -4,7 +4,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.cerberos.dto.LoginRequest;
 import com.example.cerberos.dto.RegisterRequest;
 import com.example.cerberos.entities.User;
@@ -34,23 +33,27 @@ public class AuthService {
     }
 
     public String login(LoginRequest request) {
+        // Buscar usuario con su documento
         User user = userRepository.findByDocumentoWithRoles(request.getDocumento())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // Verificar que la contraseña es correcta
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
+        // Obtener los roles del usuario
         var roles = user.getRoles().stream()
                 .map(UserRole::getRoleName)
                 .collect(Collectors.toList());
 
+        // Generar el token
         return jwtUtil.generateToken(user.getDocumento(), roles);
     }
 
     public String register(RegisterRequest request) {
+        // Registro de nuevo usuario
         try {
-
             if (userRepository.findByDocumento(request.getDocumento()).isPresent()) {
                 return "El usuario ya existe";
             }
@@ -69,17 +72,28 @@ public class AuthService {
 
             return "Usuario registrado con éxito";
         } catch (Exception e) {
-            System.out.println("Error al registrar el usuario: " + e.getMessage());
             e.printStackTrace();
             return "Error al registrar el usuario";
         }
     }
 
     public void setTicketCookie(String token, HttpServletResponse response) {
+        // Crear y agregar la cookie con el token
         Cookie cookie = new Cookie("ticket", token);
         cookie.setHttpOnly(true);
+        cookie.setSecure(false);  // Cambiar a true si usas HTTPS
         cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60);
+        cookie.setMaxAge(24 * 60 * 60);  // 1 día
+        response.addCookie(cookie);
+    }
+
+    public void clearTicketCookie(HttpServletResponse response) {
+        // Limpiar la cookie (eliminarla)
+        Cookie cookie = new Cookie("ticket", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);  // Cambiar a true si usas HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 }

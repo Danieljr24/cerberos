@@ -2,6 +2,7 @@ package com.example.cerberos.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
