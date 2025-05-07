@@ -31,11 +31,13 @@ public class DataInitializer {
     @PostConstruct
     public void initializeData() {
         if (userRepository.count() == 0) {
-            User zeus = createUser("10000001", "12345", TipoDocumento.CEDULA_CIUDADANIA);
-            User dani = createUser("10000002", "1234", TipoDocumento.TARJETA_IDENTIDAD);
+            User dani = createUser("1021672851", "12345", TipoDocumento.CEDULA_CIUDADANIA);
+            User zeus = createUser("10000002", "1234", TipoDocumento.TARJETA_IDENTIDAD);
+            User diego = createUser("12345678", "1234", TipoDocumento.CEDULA_CIUDADANIA);
 
-            createRole(zeus, "ADMIN");
-            createRole(dani, "USER");
+            createRole(zeus, "SUPER_ADMIN");
+            createRole(dani, "ADMIN");
+            createRole(diego, "SUPER_ADMIN");
 
             System.out.println("Usuarios y roles creados correctamente.");
         }

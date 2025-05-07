@@ -1,10 +1,16 @@
 type Query {
   saludo: String
+  getRole(documento: String!): String
 }
 
 type Mutation {
-  login(input: LoginInput!): String
+  login(input: LoginInput): LoginResponse
   logout: String 
+}
+
+type LoginResponse {
+  token : String
+  user : User
 }
 
 input LoginInput {

@@ -5,11 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
@@ -22,8 +24,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(cors -> cors.configurationSource(request -> {
+            var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+            corsConfig.addAllowedOrigin("http://localhost:3000");
+            corsConfig.addAllowedMethod("GET");
+            corsConfig.addAllowedMethod("POST");
+            corsConfig.addAllowedMethod("PUT");
+            corsConfig.addAllowedMethod("DELETE");
+            corsConfig.addAllowedHeader("*");
+            corsConfig.setAllowCredentials(true);
+            return corsConfig;
+        }));
         http.authorizeHttpRequests(auth -> auth
+
                 .requestMatchers("/auth/login", "/auth/logout", "/graphql").permitAll()
                 .anyRequest().authenticated()
         );

@@ -12,6 +12,7 @@ import com.example.cerberos.repository.UserRepository;
 import com.example.cerberos.repository.UserRoleRepository;
 import com.example.cerberos.util.JwtUtil;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,26 +34,25 @@ public class AuthService {
     }
 
     public String login(LoginRequest request) {
-        // Buscar usuario con su documento
         User user = userRepository.findByDocumentoWithRoles(request.getDocumento())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        // Verificar que la contraseña es correcta
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        // Obtener los roles del usuario
         var roles = user.getRoles().stream()
                 .map(UserRole::getRoleName)
                 .collect(Collectors.toList());
 
-        // Generar el token
         return jwtUtil.generateToken(user.getDocumento(), roles);
     }
 
+    public User getUser(String documento) {
+        return userRepository.findByDocumento(documento)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
     public String register(RegisterRequest request) {
-        // Registro de nuevo usuario
         try {
             if (userRepository.findByDocumento(request.getDocumento()).isPresent()) {
                 return "El usuario ya existe";
@@ -95,5 +95,27 @@ public class AuthService {
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+
+    public boolean hasRole(String documento, String roleName) {
+        return userRepository.findByDocumentoWithRoles(documento)
+                .map(user -> user.getRoles().stream()
+                        .anyMatch(role -> role.getRoleName().equalsIgnoreCase(roleName)))
+                .orElse(false);
+    }
+
+    public String getUserRole(String documento) {
+        Optional<User> userOptional = userRepository.findByDocumentoWithRoles(documento);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // Suponiendo que quieres obtener el primer rol asociado al usuario
+            return user.getRoles().stream()
+                    .map(UserRole::getRoleName)
+                    .findFirst()
+                    .orElse("No tiene roles asignados");
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
+        }
     }
 }

@@ -14,10 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
@@ -25,6 +28,16 @@ public class AuthController {
         authService.setTicketCookie(token, response);
 
         return ResponseEntity.ok().body("Login exitoso");
+    }
+
+    @GetMapping("/check-role")
+    public ResponseEntity<?> checkUserRole(@RequestParam String documento, @RequestParam String roleName) {
+        boolean hasRole = authService.hasRole(documento, roleName);
+        if (hasRole) {
+            return ResponseEntity.ok("El usuario tiene el rol: " + roleName);
+        } else {
+            return ResponseEntity.status(404).body("El usuario no tiene el rol: " + roleName);
+        }
     }
 
     @PostMapping("/register")

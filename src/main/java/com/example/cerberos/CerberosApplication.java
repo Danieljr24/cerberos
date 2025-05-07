@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OlimpoServiceApplication {
+public class CerberosApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OlimpoServiceApplication.class, args);
+		SpringApplication.run(CerberosApplication.class, args);
 	}
 
 }
